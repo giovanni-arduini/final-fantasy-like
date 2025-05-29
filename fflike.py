@@ -1,7 +1,14 @@
 import random
 
 game_running = True
-player = {"name": "Tidus", "attack": 10, "turbo": 25, "heal": 16, "health": 100, "mana": 20}
+player = {"name": "Tidus", 
+          "attack": 10, 
+          "turbo": 25, 
+          "heal": 16, 
+          "health": 100, 
+          "speed": 10, 
+          "mana": 20, 
+          "turbo_bar": 0}
 
 print("---"*7)
 print("Enter player name")
@@ -10,7 +17,15 @@ player["name"] = input()
 
 while game_running:
     player["health"] = 100
-    monster = {"name": "Monster", "attack": 12, "super": 20, "heal": 6, "health": 100}
+    player["mana"] = 20
+    player["turbo_bar"] = 0
+
+    monster = {"name": "Monster", 
+               "attack": 12, 
+               "super": 20, 
+               "heal": 6, 
+               "health": 100, 
+               "speed": 8}
 
     print("---"*7)
     print("New round... Fight!")
@@ -37,10 +52,15 @@ while game_running:
         if player_choice == '1':
             # Player attacks
             crit = random.randint(1,10)
+            monster_dodge = random.randint(1, 100) + monster["speed"] - player["speed"]
+
             if crit == "10":
                 monster["health"]-= player["attack"]*2
                 print(f"It's a citical hit! Monster health: {str(monster['health'])}")
-                
+
+            if monster_dodge > 93:
+                print("The monster dodged your attack!")    
+
             else:
                 monster["health"] -= player["attack"]
                 print(f"You attack the monster! Monster health: {str(monster['health'])}")
@@ -53,15 +73,17 @@ while game_running:
 
             # Monster turn
             if monster["health"] < 95:
-                num = random.randint(1, 6)
-                # print(f"Monster rolls: {num}")
-                if num == 6:
+                monster_heal = random.randint(1, 6)
+                dodge = random.randint(1, 100) + player["speed"] - monster["speed"]
+                if monster_heal == 6:
                     monster["health"] += monster["heal"]
                     print(f"Monster heals! {str(monster['health'])}")
+                elif dodge > 90:
+                    print("You dodged the attack!")
                 else:
-                    num2 = random.randint(1, 10)
+                    monster_super = random.randint(1, 10)
                     # print(num2)
-                    if num2 == 10:
+                    if monster_super == 10:
                         player["health"] -= monster["super"]
                         print(f"Monster attacks you with a super attack! Your health: {str(player['health'])}")
 
@@ -86,10 +108,12 @@ while game_running:
             # Monster turn
             if monster["health"] < 95:
                 num = random.randint(1, 6)
-                # print(f"Monster rolls: {num}")
+                dodge = random.randint(1, 100) + player["speed"]
                 if num == 6:
                     monster["health"] += monster["heal"]
                     print("Monster heals!")
+                elif dodge > 90:
+                    print("You dodged the attack!")
                 else:
                     player["health"] -= monster["attack"]
                     print(f"Monster attacks you! Your health: {str(player['health'])}")
